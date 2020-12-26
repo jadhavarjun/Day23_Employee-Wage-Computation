@@ -1,3 +1,10 @@
+interface InEmployeeWageOops {
+        public void addCompanyEmpWage(String company, int empRatePerHr, int numberOfWorkingDays, int maxHrPerMonth);
+        public void computeEmpWage();
+
+}//InEmployeeWageOops  interface
+
+
 class CompanyEmpWage {
 	public final String company;
 	public final int empRatePerHr;
@@ -20,62 +27,59 @@ class CompanyEmpWage {
 		}
 }
 
-class EmpWage {
+//implementation of InEmployeeWageOops  interface
+
+class EmpWage implements InEmployeeWageOops {
         //constant
         public static final int IS_FULL_TIME = 1;
         public static final int IS_PART_TIME = 2;
 
-		private int numOfCompany = 0;
-		private CompanyEmpWage[] companyEmpWageArray;
-		public EmpWage() {
+	private int numOfCompany = 0;
+	private CompanyEmpWage[] companyEmpWageArray;
+	public EmpWage() {
 		companyEmpWageArray = new CompanyEmpWage[5];
+	}
+	public void addCompanyEmpWage(String company, int empRatePerHr, int numberOfWorkingDays, int maxHrPerMonth) {
+		companyEmpWageArray[numOfCompany] = new CompanyEmpWage(company, empRatePerHr, numberOfWorkingDays, maxHrPerMonth);
+
+		numOfCompany++;
+
+	}
+	public void computeEmpWage() {
+		for (int i=0; i<numOfCompany; i++) {
+			companyEmpWageArray[i].setTotalEmpWage(this.computeEmpWage(companyEmpWageArray[i]));
+			System.out.println(companyEmpWageArray[i]);
 		}
-		private void addCompanyEmpWage(String company, int empRatePerHr, int numberOfWorkingDays, int maxHrPerMonth) {
-			companyEmpWageArray[numOfCompany] = new CompanyEmpWage(company, empRatePerHr, numberOfWorkingDays, maxHrPerMonth);
-
-			numOfCompany++;
-
-		}
-		private void computeEmpWage() {
-			for (int i=0; i<numOfCompany; i++) {
-				companyEmpWageArray[i].setTotalEmpWage(this.computeEmpWage(companyEmpWageArray[i]));
-				System.out.println(companyEmpWageArray[i]);
-			}
-		}
-
-
-
-
+	}
         private int computeEmpWage(CompanyEmpWage companyEmpWage) {
-                //variables
+        //variables
 
-				int empHrs = 0;
-				int totalEmpHrs = 0;
-				int totalWorkingDays = 0;
-				//int totalEmpWage = 0;
+		int empHrs = 0;
+		int totalEmpHrs = 0;
+		int totalWorkingDays = 0;
+		//int totalEmpWage = 0;
 
-				//computation
-				while (totalEmpHrs <= companyEmpWage.maxHrPerMonth && totalWorkingDays < companyEmpWage.numberOfWorkingDays) {
+		//computation
+		while (totalEmpHrs <= companyEmpWage.maxHrPerMonth && totalWorkingDays < companyEmpWage.numberOfWorkingDays) {
 
-					totalWorkingDays++;
-					double empCheck = Math.floor(Math.random() * 10) % 3;
-					switch ((int)empCheck)
-                        {
-                                case IS_FULL_TIME :
-                                        empHrs = 8;
-                                        break;
+			totalWorkingDays++;
+			double empCheck = Math.floor(Math.random() * 10) % 3;
+			switch ((int)empCheck) {
+                        	case IS_FULL_TIME :
+                                	empHrs = 8;
+                                	break;
                                 case IS_PART_TIME :
                                         empHrs = 4;
                                         break;
                                 default :
                                         empHrs = 0;
 
-					}//switch
-					totalEmpHrs += empHrs;
-					System.out.println(totalWorkingDays+" "+totalEmpHrs);
-				}//while
+			}//switch
+			totalEmpHrs += empHrs;
+			System.out.println(totalWorkingDays+" "+totalEmpHrs);
+		}//while
 
-					return totalEmpHrs * companyEmpWage.empRatePerHr;
+		return totalEmpHrs * companyEmpWage.empRatePerHr;
 
 
         }//empSalary()
