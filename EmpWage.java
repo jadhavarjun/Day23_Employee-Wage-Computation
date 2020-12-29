@@ -1,4 +1,12 @@
 import java.util.ArrayList;
+import java.util.HashMap;
+interface InEmployeeWageOops {
+        public void addCompanyEmpWage(String company, int empRatePerHr, int numberOfWorkingDays, int maxHrPerMonth);
+        public void computeEmpWage();
+
+}//InEmployeeWageOops  interface
+
+
 class CompanyEmpWage {
 	public final String company;
 	public final int empRatePerHr;
@@ -19,9 +27,9 @@ class CompanyEmpWage {
 	public String toString() {
 			return "Total employee wage for: " +company+ " is " +totalEmpWage;
 	}
-}
+}//ComanyEmpWage class
 
-class EmpWage {
+class EmpWage implements InEmployeeWageOops {
         //constant
         public static final int IS_FULL_TIME = 1;
         public static final int IS_PART_TIME = 2;
@@ -29,21 +37,24 @@ class EmpWage {
 	private int numOfCompany = 0;
 	ArrayList<Integer> dailyWage=new ArrayList<Integer>();
 	private ArrayList<CompanyEmpWage> companyEmpWageArrayList;
+	private HashMap<String,CompanyEmpWage> companyEmpWageMap;
 	public EmpWage() {
 		companyEmpWageArrayList = new ArrayList<>();
-
+		companyEmpWageMap= new HashMap<>();
 	}
 	public void dailyWage(){
 		dailyWage.add(daySalary);
 	}
-	private void addCompanyEmpWage(String company, int empRatePerHr, int numberOfWorkingDays, int maxHrPerMonth) {
+	public void addCompanyEmpWage(String company, int empRatePerHr, int numberOfWorkingDays, int maxHrPerMonth) {
 		CompanyEmpWage companyEmpWage = new CompanyEmpWage(company, empRatePerHr, numberOfWorkingDays, maxHrPerMonth);
 		companyEmpWageArrayList.add(companyEmpWage);
+		companyEmpWageMap.put(company, companyEmpWage);
+
 		//numOfCompany++;
 
 
 	}
-	private void computeEmpWage() {
+	public void computeEmpWage() {
 		for (int i=0; i<companyEmpWageArrayList.size(); i++) {
 			CompanyEmpWage companyEmpWage = companyEmpWageArrayList.get(i);
 			companyEmpWage.setTotalEmpWage(this.computeEmpWage(companyEmpWage));
@@ -52,11 +63,9 @@ class EmpWage {
 	}
        	private int computeEmpWage(CompanyEmpWage companyEmpWage) {
                 //variables
-
 		int empHrs = 0;
 		int totalEmpHrs = 0;
 		int totalWorkingDays = 0;
-		//int totalEmpWage = 0;
 
 		//computation
 		while (totalEmpHrs <= companyEmpWage.maxHrPerMonth && totalWorkingDays < companyEmpWage.numberOfWorkingDays) {
@@ -87,6 +96,9 @@ class EmpWage {
 		//public String toString() {
 		//	return "Total employee wage for: " +company+ "is " +totalEmpWage;
 		//}
+		public int getTotalEmpWage(String company) {
+			return companyEmpWageMap.get(company).totalEmpWage;
+		}
 
 
         public static void main(String[] args) {
@@ -97,5 +109,6 @@ class EmpWage {
 		empWageBuilder.addCompanyEmpWage("IBM", 100, 8, 100);
 		empWageBuilder.addCompanyEmpWage("google", 100, 10, 100);
 		empWageBuilder.computeEmpWage();
+		System.out.println("Total wage of queried company: "+empWageBuilder.getTotalEmpWage("accenture"));
         }//main()
 }//class
